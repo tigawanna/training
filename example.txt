@@ -1,0 +1,2 @@
+This is an awesome piece of file text.
+I will use it ina file reader with os.Open
