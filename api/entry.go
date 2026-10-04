@@ -5,46 +5,20 @@ import (
 	"log"
 	"net"
 	"net/http"
-	"os"
+
+	"github.com/tigawanna/training/utils"
 )
 
 func BootstrapApi() {
-	env := GetEnv()
+	env := utils.GetEnv()
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", indexHandler)
+	mux.HandleFunc("GET /users", indexHandler)
+	mux.HandleFunc("POST /users", createUserHandler)
 
-	ln, err := net.Listen("tcp", ":"+env.port)
+	ln, err := net.Listen("tcp", ":"+env.Port)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("server running on http://localhost:%v\n", env.port)
+	fmt.Printf("server running on http://localhost:%v\n", env.Port)
 	log.Fatal(http.Serve(ln, mux))
-}
-
-func indexHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, " Hello world")
-}
-
-type Environment string
-
-const (
-	Development Environment = "DEV"
-	Production  Environment = "PROD"
-)
-
-type Env struct {
-	port       string
-	enviroment Environment
-}
-
-func GetEnv() Env {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-	environment := Environment(os.Getenv("ENVIROMENT"))
-	if environment == "" {
-		environment = Development
-	}
-	return Env{port, environment}
 }
