@@ -1,15 +1,10 @@
 package main
 
-import "sync"
+import "github.com/uptrace/bun"
 
 type User struct {
-	Name string `json:"name"`
-}
+	bun.BaseModel `bun:"table:users"`
 
-var (
-	mutex sync.RWMutex
-	nextID = 2
-	Users  = map[int]User{
-		1: {Name: "User 1"},
-	}
-)
+	ID   int64  `bun:",pk,autoincrement" json:"id"`
+	Name string `bun:",notnull" json:"name"`
+}

@@ -12,8 +12,13 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 // get all users
 func usersHandler(w http.ResponseWriter, r *http.Request) {
+	users := []User{}
+	if err := db.NewSelect().Model(&users).Order("id").Scan(r.Context()); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(Users)
+	json.NewEncoder(w).Encode(users)
 }
 
 func createUserHandler(w http.ResponseWriter, r *http.Request) {
@@ -24,11 +29,11 @@ func createUserHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid body JSON", http.StatusBadRequest)
 		return
 	}
-	id := nextID
-	mutex.Lock()
-	Users[id] = u
-	mutex.Unlock()
-	nextID++
+	u.ID = 0
+	if _, err := db.NewInsert().Model(&u).Exec(r.Context()); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)

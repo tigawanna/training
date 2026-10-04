@@ -12,6 +12,7 @@ const (
 type Env struct {
 	Port       string
 	Enviroment Environment
+	DBPath     string
 }
 
 func GetEnv() Env {
@@ -23,5 +24,9 @@ func GetEnv() Env {
 	if environment == "" {
 		environment = Development
 	}
-	return Env{Port: port, Enviroment: environment}
+	dbPath := os.Getenv("DB_PATH")
+	if dbPath == "" {
+		dbPath = "data.db"
+	}
+	return Env{Port: port, Enviroment: environment, DBPath: dbPath}
 }
