@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-const todosFile = "todos.json"
+const todosFile = "assets/todos.json"
 
 func SrartCli(){
 		if len(os.Args) < 2 {
