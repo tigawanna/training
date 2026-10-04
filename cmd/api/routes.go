@@ -1,4 +1,4 @@
-package api
+package main
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/tigawanna/training/utils"
+	"github.com/tigawanna/training/internals/utils"
 )
 
 func BootstrapApi() {
