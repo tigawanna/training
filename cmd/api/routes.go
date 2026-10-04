@@ -9,11 +9,20 @@ import (
 	"github.com/tigawanna/training/internals/utils"
 )
 
+var routes []string
+
+func handle(mux *http.ServeMux, pattern string, handler http.HandlerFunc) {
+	mux.HandleFunc(pattern, handler)
+	routes = append(routes, pattern)
+}
+
 func BootstrapApi() {
 	env := utils.GetEnv()
 	mux := http.NewServeMux()
-	mux.HandleFunc("GET /users", indexHandler)
-	mux.HandleFunc("POST /users", createUserHandler)
+
+	handle(mux, "GET /{$}", indexHandler)
+	handle(mux, "GET /users", usersHandler)
+	handle(mux, "POST /users", createUserHandler)
 
 	ln, err := net.Listen("tcp", ":"+env.Port)
 	if err != nil {

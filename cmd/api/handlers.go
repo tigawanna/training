@@ -4,9 +4,14 @@ import (
 	"encoding/json"
 	"net/http"
 )
+// list all registered routes
+func indexHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(routes)
+}
 
 // get all users
-func indexHandler(w http.ResponseWriter, r *http.Request) {
+func usersHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(Users)
 }
